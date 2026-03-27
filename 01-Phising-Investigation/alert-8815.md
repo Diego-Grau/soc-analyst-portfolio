@@ -1,34 +1,40 @@
-# Alerta 8815 – Phishing (Spoofing Amazon)
+# Alerta 8815 – Phishing (Spoofing de Amazon – Correo Recibido)
 
-## Time of Activity
-25/03/2026 08:37 UTC
+## Detalles del Evento
+- **Fecha/Hora:** 25/03/2026 08:37 UTC
+- **ID de Alerta:** 8815
+- **Prioridad:** Media
 
-## Entities Involved
-- Sender: urgents[@]amazon[.]biz  
-- Recipient: h.harris@thetrydaily.thm  
-- URL: hxxp://bit[.]ly/3sHkX3da12340
+## Entidades Involucradas
+- **Remitente:** urgents[@]amazon[.]biz
+- **Destinatario:** h.harris[@]thetrydaily[.]thm (Hanna Harris)
+- **URL Detectada:** hxxp://bit[.]ly/3sHkX3da12340
+- **Asunto:** Acción Urgente Requerida - Problema con su cuenta de Amazon
 
-## Investigation Findings
-- El correo utiliza un acortador de URL y un subdominio malicioso que intenta suplantar a Amazon.  
-- No hay evidencia de que el usuario haya hecho click.  
-- La alerta corresponde a un intento de phishing detectado por la herramienta interna.  
+## Hallazgos de la Investigación
+- **Suplantación de Identidad (Spoofing):** El dominio `amazon[.]biz` no es oficial de Amazon; se usa TLD inusual para evadir filtros.
+- **Uso de Acortadores de URL:** Se utiliza `bit[.]ly` para ocultar el destino final del enlace.
+- **Ingeniería Social:** Mensaje con urgencia (“Action Required”) para inducir clic rápido.
+- **Interacción del Usuario:** No hay evidencia de clic ni acceso a la URL. El correo solo fue recibido en el buzón.
 
-## Verdict
-**True Positive – Phishing** (Confianza: Alta)
+## Veredicto
+**True Positive (TP) – Correo Malicioso Detectado**  
 
-## Impact Assessment
-- Sin interacción de usuario.  
-- No se registraron conexiones salientes ni compromisos.  
+## Evaluación de Impacto
+- **Interacción del Usuario:** No realizada.  
+- **Resultado de la Conexión:** Ninguno, el enlace no fue accedido.  
+- **Riesgo Organizacional:** Exposición al intento de phishing; la cuenta de Hanna Harris no se considera comprometida.
 
-## Escalation Decision
-- No es necesario escalar. La alerta fue contenida.  
+## Decisión de Escalación
+- Escalado a SOC L2 para seguimiento y concienciación interna.
+- No se requiere intervención inmediata (L3).
 
-## Recommended Actions
-- Añadir a la lista negra `urgents[@]amazon[.]biz`.  
-- Ajustar filtros de correo para mayor efectividad.  
-- Formar a los empleados sobre no abrir enlaces desconocidos.  
+## Acciones Recomendadas
+1. Informar a Hanna Harris del correo malicioso recibido y reforzar la educación sobre phishing.  
+2. Bloquear el dominio `amazon[.]biz` y la URL en el proxy/firewall.  
+3. Registrar el evento en el SIEM y marcarlo como “Correo Malicioso – No interactuado”.  
+4. Incluir este caso como ejemplo en campañas de concienciación interna.
 
-## IOCs
-- dominio: amazon[.]biz  
-- URL: bit[.]ly/3sHkX3da12340  
-- correo: urgents[@]amazon[.]biz
+## Evidencia Técnica
+- Para consultar el evento de correo en Splunk:  
+[Evidencia Técnica](splunk_queries.md)

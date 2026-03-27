@@ -1,160 +1,94 @@
 # Investigación de Phishing – SOC Simulator
 
 ## Resumen
-
 Este proyecto documenta la investigación de múltiples alertas de seguridad relacionadas con actividad de phishing dentro de un entorno SOC simulado proporcionado por TryHackMe.
 
-El análisis se centra en identificar intentos de phishing, evaluar el posible impacto y determinar las acciones de respuesta apropiadas basadas en los datos de logs disponibles (correo electrónico, firewall y tráfico web).
+El análisis se centra en identificar intentos de phishing, evaluar el impacto real mediante correlación de logs en Splunk y determinar las acciones de respuesta basadas en datos de correo, firewall y tráfico web.
 
 ---
 
 ## Objetivos
-
-- Identificar intentos de phishing y distinguirlos de correos legítimos  
-- Analizar indicadores como dominios de remitentes, URLs y direcciones IP  
-- Evaluar si hubo interacción del usuario o compromiso del sistema  
-- Determinar requisitos de escalación  
-- Recomendar acciones de remediación  
-
----
-
-## Contexto del Entorno
-
-La investigación se realizó en un entorno SOC simulado con visibilidad limitada de logs, incluyendo:
-
-- Logs de correo electrónico  
-- Logs de firewall  
-- Datos de tráfico web  
-
-Nota: Algunos indicadores pueden no arrojar resultados en herramientas de inteligencia de amenazas reales debido a la naturaleza simulada del entorno.
+- Identificar intentos de phishing y distinguirlos de correos legítimos.
+- Analizar indicadores como dominios de remitentes, URLs y direcciones IP.
+- Correlacionar eventos de correo con logs de red para verificar la interacción del usuario.
+- Evaluar el éxito o fallo de las medidas de control (Firewall/Filtros).
+- Determinar requisitos de escalación y recomendar acciones de remediación.
 
 ---
 
 ## Resumen de Incidentes
 
-| Alert ID | Tipo                         | Descripción                                    | Escalación |
-| -------- | ---------------------------- | --------------------------------------------- | ---------- |
-| 8814     | Falso Positivo               | Correo legítimo de onboarding                 | No         |
-| 8815     | Phishing                     | Correo malicioso (suplantación de Amazon)    | No         |
-| 8816     | Intento de Conexión Maliciosa| Conexión saliente bloqueada a URL de phishing | Sí         |
-| 8817     | Campaña de Phishing          | Dominio typosquatting (suplantación de Microsoft) | Sí     |
+| Alert ID | Tipo                   | Descripción                                      | Interacción               | Escalación        |
+|----------|------------------------|--------------------------------------------------|---------------------------|------------------|
+| 8814     | Falso Positivo         | Correo legítimo de onboarding                    | N/A                       | No               |
+| 8815     | Phishing               | Correo malicioso (suplantación de Amazon)       | No confirmada             | Sí (L2)          |
+| 8816     | Intento de Conexión    | Conexión bloqueada hacia URL sospechosa         | Sí (Bloqueo firewall)     | Sí (L2)          |
+| 8817     | Campaña de Phishing    | Dominio typosquatting (suplantación Microsoft)  | No confirmada             | Sí (Urgente)     |
 
 ---
 
 ## Hallazgos Clave
 
-### 1. Técnicas de Phishing Identificadas
-
-- Suplantación de dominio (amazon.biz)  
-- Typosquatting (m1crosoftsupport.co)  
-- Uso de acortadores de URL (bit.ly)  
-- Tácticas de ingeniería social  
-
----
-
-### 2. Reutilización de Infraestructura
-
-- Repetición del mismo URL malicioso (bit.ly)  
-- Indica actividad coordinada de phishing  
+### Técnicas de Phishing Identificadas
+- Suplantación de dominio (`amazon[.]biz`)
+- Typosquatting (`m1crosoftsupport[.]co`)
+- Uso de acortadores de URL (`bit[.]ly`)
+- Ingeniería social basada en urgencia y soporte técnico
 
 ---
 
-### 3. Nueva Infraestructura Maliciosa
+### Correlación de Eventos y Actividad de Red
 
-- Detección de un nuevo dominio typosquatting  
-- Sugiere posible campaña de phishing dirigida a usuarios  
+**Análisis de Clics / Conexiones:**  
+- Alerta 8815: correo recibido, **no hay evidencia de clic** en la URL.  
+- Alerta 8816: host 10.20.2.17 intentó acceder a la URL sospechosa; la conexión fue **bloqueada por el firewall**.  
+- Alerta 8817: correo recibido, **sin evidencia de interacción con la URL**.
 
----
-
-### 4. Actividad de Red
-
-- Una alerta mostró un intento de conexión saliente  
-- El firewall bloqueó correctamente la conexión  
-- No se estableció comunicación exitosa  
+**Fallo de Detección:**  
+- El dominio `m1crosoftsupport[.]co` no estaba categorizado como malicioso, pero no se tiene evidencia de que el usuario accediera a la página de login.
 
 ---
 
 ## Evaluación de Impacto
-
-- Interacción del usuario: No observada  
-- Tráfico saliente: Bloqueado o no detectado  
-- Compromiso del sistema: No se identificó evidencia  
-
-Todos los ataques fueron contenidos en etapas tempranas, sin compromiso confirmado.
+- Interacción del usuario: confirmada solo en el intento de conexión de 8816 (bloqueado).  
+- Tráfico saliente: solo registrado en 8816 y bloqueado por firewall.  
+- Compromiso de sistema: no se detectó descarga de malware ni exfiltración de datos; riesgo limitado a exposición a phishing.
 
 ---
 
 ## Lógica de Escalación
-
-- **No Escalado:** Alertas sin interacción del usuario o sin impacto  
-- **Escalado:**  
-  - Evidencia de intentos de conexión  
-  - Detección de nueva infraestructura maliciosa  
-  - Potencial para una campaña más amplia  
+- No escalado: falsos positivos o sin interacción.  
+- Prioridad media: conexiones a IOCs bloqueadas (8816).  
+- Prioridad alta: conexiones permitidas a infraestructura maliciosa (ninguna confirmada).
 
 ---
 
 ## Acciones de Respuesta
-
-- Bloquear dominios e IPs maliciosas  
-- Eliminar correos de phishing de buzones afectados  
-- Monitorear indicadores similares  
-- Investigar hosts afectados si ocurre intento de conexión  
-- Mejorar reglas de filtrado de correo  
-- Promover formación de usuarios sobre concienciación en phishing  
+- Bloqueo de dominios e IPs en el SIEM.  
+- Revisión y educación de usuarios sobre phishing.  
+- Eliminación masiva de correos sospechosos (purge).  
+- Revisión de logs de autenticación para eventos inusuales.  
+- Mejora de reglas de filtrado en firewall y proxy.
 
 ---
 
 ## Indicadores de Compromiso (IOCs)
 
-**Dominios:**  
-- amazon.biz  
-- m1crosoftsupport.co  
-- bit.ly/3sHkX3da12340  
+**Dominios:**
+- amazon[.]biz
+- m1crosoftsupport[.]co
+- bit[.]ly/3sHkX3da12340
 
-**Direcciones IP:**  
-- 67.199.248.11  
-- 102.89.222.143  
-
-**Correos electrónicos:**  
-- urgents[@]amazon[.]biz  
-- no-reply[@]m1crosoftsupport[.]co  
-
----
-
-## Lecciones Aprendidas
-
-- La detección por sí sola no es suficiente; la evaluación de impacto es crítica  
-- La ausencia de logs también es un hallazgo válido  
-- No todas las alertas de phishing requieren escalación  
-- Identificar patrones entre alertas permite detectar campañas  
-- La documentación profesional es esencial en operaciones SOC  
-
----
-
-## Habilidades Demostradas
-
-- Análisis de phishing  
-- Investigación de logs  
-- Triage de incidentes (True Positive / False Positive)  
-- Evaluación de impacto  
-- Decisión de escalación  
-- Identificación y correlación de IOCs  
-
----
-
-
----
-
-## Herramientas Utilizadas
-
-- SIEM SPLUNK (entorno simulado)  
-- Herramientas internas de inteligencia de amenazas  
+**Direcciones IP:**
+- 67.199.248.11
+- 102.89.222.143
+- 45.148.10.131
 
 ---
 
 ## Conclusión
+La detección del correo es el primer paso del análisis.
 
-Esta investigación demuestra cómo múltiples alertas aparentemente independientes pueden revelar una actividad de phishing más amplia cuando se analizan de manera colectiva.
+La correlación en Splunk muestra que solo hubo **un intento de conexión bloqueado por firewall** (alerta 8816), mientras que los demás correos fueron recibidos pero no accedidos.  
 
-Al correlacionar indicadores, evaluar el impacto y tomar decisiones de escalación informadas, es posible detectar y responder eficazmente a amenazas incluso en entornos con visibilidad limitada.
+Esto indica que, aunque no hay compromiso confirmado, el incidente refuerza la necesidad de educación y bloqueos preventivos en la infraestructura de seguridad.
