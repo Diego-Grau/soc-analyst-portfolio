@@ -36,7 +36,7 @@ El atacante utiliza `wget` para descargar un script de enumeración automática 
 ### 3. Reconocimiento de Red
 Se identifica un intento de utilizar un analizador de paquetes para interceptar tráfico, una actividad orientada a obtener credenciales de otros servicios activos en la red interna.
 
-![Imagen 3: Uso de tcpdump](images/images/question3.png)
+![Imagen 3: Uso de tcpdump](/images/question3.png)
 > **Instrucción:** Guarda la captura del comando `tcpdump` como `question3.png` en la carpeta `images`.
 
 * **Pregunta:** ¿Qué herramienta de análisis de paquetes intentó usar el atacante?
