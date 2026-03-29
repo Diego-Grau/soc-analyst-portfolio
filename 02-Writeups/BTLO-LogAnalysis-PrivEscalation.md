@@ -25,7 +25,6 @@ Al inspeccionar el historial, se observa que el atacante lista los directorios d
 El atacante utiliza `wget` para descargar un script de enumeración automática desde un repositorio de GitHub. Este script busca debilidades en el kernel y servicios mal configurados.
 
 ![Imagen 2: Descarga de exploit suggester](images/question2.png)
-> **Instrucción:** Guarda la captura del comando `wget` como `question2.png` en la carpeta `images`.
 
 * **Pregunta:** ¿Qué script intentó descargar el atacante al servidor?
 * **Respuesta:** linux-exploit-suggester.sh
@@ -35,8 +34,7 @@ El atacante utiliza `wget` para descargar un script de enumeración automática 
 ### 3. Reconocimiento de Red
 Se identifica un intento de utilizar un analizador de paquetes para interceptar tráfico, una actividad orientada a obtener credenciales de otros servicios activos en la red interna.
 
-![Imagen 3: Uso de tcpdump](/images/question3.png)
-> **Instrucción:** Guarda la captura del comando `tcpdump` como `question3.png` en la carpeta `images`.
+![Imagen 3: Uso de tcpdump](images/question3.png)
 
 * **Pregunta:** ¿Qué herramienta de análisis de paquetes intentó usar el atacante?
 * **Respuesta:** tcpdump
@@ -47,7 +45,6 @@ Se identifica un intento de utilizar un analizador de paquetes para interceptar 
 A pesar de las restricciones sobre archivos `.php`, el atacante logró ejecutar código PHP utilizando la extensión `.phtml`, la cual suele ser procesada por el servidor web como código ejecutable si no está correctamente restringida.
 
 ![Imagen 4: Borrado de la web shell](images/question4.png)
-> **Instrucción:** Guarda la captura donde aparece el archivo `.phtml` como `question4.png` en la carpeta `images`.
 
 * **Pregunta:** ¿Qué extensión de archivo usó el atacante para evadir el filtro de subida?
 * **Respuesta:** .phtml
@@ -58,7 +55,6 @@ A pesar de las restricciones sobre archivos `.php`, el atacante logró ejecutar 
 El atacante buscó archivos con el bit SUID (Set User ID) activo. Identificó que el binario de Python tenía este permiso, lo que permite ejecutar comandos con los privilegios del propietario (root).
 
 ![Imagen 5: Explotación de SUID](images/question5.png)
-> **Instrucción:** Guarda la captura de la shell de Python como `question5.png` en la carpeta `images`.
 
 * **Pregunta:** ¿Qué misconfiguración fue explotada en el binario ‘python’ para ganar acceso de root?
 * **Respuesta:** 4 - SUID
