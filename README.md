@@ -1,40 +1,53 @@
-# SOC Analyst Portfolio
+# Cybersecurity Analyst Portfolio
 
-This repository documents my journey for a SOC Analyst role.
+Welcome to my practical Cybersecurity Analyst portfolio.  
 
-The goal of this project is to demonstrate practical skills in:
+This repository showcases my hands-on experience and projects focused on SOC operations, detection, incident response, and threat hunting.
 
-- Security monitoring
-- Log analysis
-- Incident response
+### Goal
+To demonstrate real-world skills required for **SOC Analyst**, **Security Analyst**, and **Blue Team** roles through practical labs, investigations, and writeups.
+
+### Key Areas of Focus
+- Security monitoring and SIEM operations
+- Log analysis and correlation
+- Incident detection and response
 - Threat hunting
 - Detection engineering
+- Security automation
 
-## Repository Structure
+### Featured Projects
 
-01-SOC-Labs
-Hands-on labs from platforms like TryHackMe.
+**01 - Phishing Investigation**  
+Comprehensive analysis of phishing campaigns, including email header examination, IOC extraction, and mitigation strategies.
 
-02-Detection-Engineering
-Detection rules and analysis.
+**02 - Writeups**  
+Detailed technical writeups from Blue Team Labs, covering:
+- Browser forensics
+- Cryptomining detection
+- Log analysis and privilege escalation
+- Splunk queries for detection
 
-03-Threat-Hunting
-Threat hunting investigations.
+**03 - Custom CTF (In Progress)**  
+Developing my own Capture The Flag challenges.
 
-04-Incident-Response
-Incident response case studies.
+*(Additional projects and labs will be added regularly as I continue building experience.)*
 
-05-Scripts
-Automation scripts for SOC tasks.
+### Tools & Technologies
+- **SIEM**: Splunk
+- **Forensics & Analysis**: Browser forensics, Windows Event Logs, Sysmon
+- **Querying**: SPL (Splunk Processing Language)
+- **Automation & Scripting**: Python, PowerShell, Bash
+- **Operating Systems**: Windows, Linux
 
-06-Writeups
-Security lab writeups.
+### Repository Structure (Current)
+- `01-Phishing-Investigation/` – Phishing campaign analysis
+- `02-Writeups/` – Lab writeups and technical documentation
+- Additional folders will be added as new projects are completed
 
-## Tools
+---
 
-- Splunk
-- TheHive
-- MISP
-- Wireshark
-- ELK
-- Sysmon
+**Contact**  
+- LinkedIn: www.linkedin.com/in/diego-grau-forment-b6b997392
+- Email: diegograuforment@gmail.com
+
+Thank you for visiting!
